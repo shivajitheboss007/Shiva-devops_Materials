@@ -6,6 +6,8 @@ class SimplePipelineBuilder {
 
     DslFactory dslFactory
     String projectName
+    String scmPoll
+    String repository
 
     void build(DslFactory dslFactory){
 
