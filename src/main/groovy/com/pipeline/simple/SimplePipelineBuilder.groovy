@@ -1,7 +1,9 @@
 package com.pipeline.simple
 
 import javaposse.jobdsl.dsl.DslFactory
+import javaposse.jobdsl.dsl.Job
 import javaposse.jobdsl.dsl.View
+import javaposse.jobdsl.dsl.helpers.publisher.PublisherContext
 
 class SimplePipelineBuilder {
 
@@ -19,9 +21,9 @@ class SimplePipelineBuilder {
 
     private void assemblePipeline(){
         createBuildJob()
+        createDeployOnTestJob()
     }
-
-    private void createBuildJob(){
+    private Job createBuildJob() {
         dslFactory.job("${projectName}-build") {
             scm {
                 git repository
@@ -35,6 +37,17 @@ class SimplePipelineBuilder {
                     useWrapper()
                 }
             }
+            publishers {
+                triggerDownstreamJob(delegate, "${projectName}-deploy-on-test", [VERSION: '$GIT_COMMIT'])
+            }
+        }
+    }
+
+    private Job createDeployOnTestJob() {
+        dslFactory.job("${projectName}-deploy-on-test") {
+            steps {
+                shell 'echo "deploying version $VERSION on test"'
+            }
 
         }
     }
@@ -45,6 +58,20 @@ class SimplePipelineBuilder {
             enableManualTriggers()
             pipelines {
                 component(projectName, "${projectName}-build")
+            }
+        }
+    }
+
+    void triggerDownstreamJob(PublisherContext publisherContext, String downstreamJob, Map downstreamParameters = [:]) {
+        publisherContext.downstreamParameterized {
+            trigger(downstreamJob) {
+                condition 'SUCCESS'
+                parameters {
+                    currentBuild()
+                    if (downstreamParameters) {
+                        predefinedProps downstreamParameters
+                    }
+                }
             }
         }
     }
