@@ -1,6 +1,7 @@
 package com.pipeline.simple
 
 import javaposse.jobdsl.dsl.DslFactory
+import javaposse.jobdsl.dsl.View
 
 class SimplePipelineBuilder {
 
@@ -13,6 +14,7 @@ class SimplePipelineBuilder {
 
         this.dslFactory = dslFactory
         assemblePipeline()
+        createPipelineView()
     }
 
     private void assemblePipeline(){
@@ -34,6 +36,16 @@ class SimplePipelineBuilder {
                 }
             }
 
+        }
+    }
+
+    private View createPipelineView() {
+        dslFactory.deliveryPipelineView(projectName) {
+            allowPipelineStart()
+            enableManualTriggers()
+            pipelines {
+                component(projectName, "${projectName}-build")
+            }
         }
     }
     }
