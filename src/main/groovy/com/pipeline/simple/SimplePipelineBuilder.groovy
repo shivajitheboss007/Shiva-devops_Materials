@@ -5,6 +5,8 @@ import javaposse.jobdsl.dsl.DslFactory
 class SimplePipelineBuilder {
 
     DslFactory dslFactory
+    String projectName
+    
     void build(DslFactory dslFactory){
 
         this.dslFactory = dslFactory;
