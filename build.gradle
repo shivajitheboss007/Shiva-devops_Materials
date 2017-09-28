@@ -6,17 +6,13 @@ sourceSets {
     jobs {
         groovy {
             srcDirs 'jobs'
-            compileClasspath = compileGroovy.classpath
+            compileClasspath += main.compileClasspath
         }
-    }
-
-    snippets {
-        groovy {
-            srcDirs 'snippets'
-            compileClasspath = compileGroovy.classpath
-        }
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
     }
 }
+
 
 repositories {
     mavenLocal()
