@@ -11,11 +11,12 @@ class SimplePipelineBuilder {
 
     void build(DslFactory dslFactory){
 
-        this.dslFactory = dslFactory;
+        this.dslFactory = dslFactory
+        assemblePipeline()
     }
 
     private void assemblePipeline(){
-
+        createBuildJob()
     }
 
     private void createBuildJob(){
