@@ -6,5 +6,5 @@ def projectProperties = [
         scmPoll: '@midnight'
 ]
 
-new SimplePipelineBuilder(projectProperties)
-        .build(this)
+new SimplePipelineBuilder(projectProperties).build(this)
+

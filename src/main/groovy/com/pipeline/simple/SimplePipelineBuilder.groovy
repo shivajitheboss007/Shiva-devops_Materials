@@ -6,7 +6,7 @@ class SimplePipelineBuilder {
 
     DslFactory dslFactory
     String projectName
-    
+
     void build(DslFactory dslFactory){
 
         this.dslFactory = dslFactory;
